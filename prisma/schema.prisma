@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  MANAGER
+  ADMIN
+}
+
+model KodUser {
+  uid      Int        @id @default(autoincrement())
+  username String     @unique
+  email    String     @unique
+  password String
+  phone    String
+  role     Role       @default(CUSTOMER)
+  balance  Float      @default(100000)
+  tokens   UserToken[]
+}
+
+model UserToken {
+  tid    Int      @id @default(autoincrement())
+  token  String   @db.LongText
+  uid    Int
+  expiry DateTime
+  user   KodUser  @relation(fields: [uid], references: [uid], onDelete: Cascade)
+
+  @@index([uid])
+  @@index([token(length: 255)])
+}

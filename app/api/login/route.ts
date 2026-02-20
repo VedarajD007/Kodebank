@@ -3,6 +3,9 @@ import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 import { generateToken } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
